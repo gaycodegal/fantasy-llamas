@@ -13,9 +13,16 @@ function request(method, url, data){
 			'Content-Type': 'application/json',
 			'Content-Length': Buffer.byteLength(data),
 			'X-Username': "testing username",
-			'Password': "testing password"
+			'X-Password': "testing password"
 		}
-    }
+    }else{
+		opts.headers = {
+			'X-Username': "testing username",
+			'X-Password': "testing password"
+		}
+	}
+	opts.headers.path = path;
+	opts.headers.method = method;
     
     return new Promise((resolve, err) => {
 		const req = http.request(opts, (resp)=>{
@@ -50,11 +57,11 @@ async function main () {
     
     resp = await request("get", "localhost/store/Spell");
     console.log(resp);
-
+	console.log("sending: ", tests.first);
     resp = await request("post", "localhost/store/Spell",
 						 JSON.stringify(tests.first));
-    console.log(resp._id);
-    resp = await request("get", "localhost/store/Spell" + resp._id);
+    console.log(resp);
+    resp = await request("get", "localhost/store/Spell/" + resp);
     console.log(resp);
     
 }

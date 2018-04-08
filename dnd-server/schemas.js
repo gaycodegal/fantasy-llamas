@@ -31,6 +31,7 @@ function valid(schema, focus){
 }
 
 function isNotValid(name, r){
+	console.log("checking", name, schemas[name]);
     return !valid(schemas[name], r);
 }
 

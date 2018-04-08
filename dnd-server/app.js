@@ -1,7 +1,7 @@
 const connection = require("./connection");
 const uuid = require("uuid/v4");
 const utils = require("./utils");
-
+const schemas = require("./schemas");
 const errors = require("./errors");
 
 var app = require('express')();
@@ -35,8 +35,9 @@ function checkArgs(args, types, typeNames, names){
 };
 
 
-async function getAll(){
-    const collection = (await connection.open())[req.params.collection];
+async function getAll(req){
+    let collection = (await connection.open());
+	collection = collection[req.params.collection];
     const cursor = await collection.find({});
     const all = await cursor.toArray();
     return [200, all];
@@ -51,7 +52,9 @@ async function getOne(req){
 };
 
 async function createObject(req, res){
+	console.log("?");
     const collection = (await connection.open())[req.params.collection];
+	console.log("?ASDF?");
     const elem = req.body;
     if(schemas.isNotValid(req.params.collection, elem))
 		return errors.NOT_VALID;
@@ -169,7 +172,7 @@ webAPI({
 		["/store/:collection/:id", getOne]
     ],
     POST: [
-		["/store/:collection/:id", createObject],
+		["/store/:collection", createObject],
     ],
     PUT: [
 		["/store/:collection/:id", updateObject]
@@ -179,6 +182,6 @@ webAPI({
     ],
     DELETE:[
 		["/store/:collection/:id", deleteRecipe],
-		["/drop/:collection", dropCollection]
+		["/store/:collection", dropCollection]
     ]
 }, port);
