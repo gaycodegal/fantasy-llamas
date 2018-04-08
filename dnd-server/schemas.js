@@ -1,15 +1,4 @@
-
-
-const scheme = {
-    title: "string",
-    ingredients: [
-		{
-			name: "string",
-			amount: "string"
-		}
-    ],
-    steps: ["string"]
-};
+const schemas = require("./dnd-schemas");
 
 function valid(schema, focus){
     if(Array.isArray(schema)){
@@ -41,8 +30,8 @@ function valid(schema, focus){
     return focus === schema;
 }
 
-function isNotValid(r){
-    return !valid(scheme, r)
+function isNotValid(name, r){
+    return !valid(schemas[name], r);
 }
 
 module.exports = {
