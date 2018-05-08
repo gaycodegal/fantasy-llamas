@@ -7,7 +7,10 @@ module.exports = {
 		 "range":"50 ft",
 		 "components":"V",
 		 "duration":"3s"
-		}
+		},
+	user:
+	{"username": "steph",
+	 "password": "cats"}
 
 };
 

@@ -4,6 +4,8 @@ const utils = require("./utils");
 const schemas = require("./schemas");
 const errors = require("./errors");
 
+
+const crypto = require("crypto");
 var app = require('express')();
 var bodyParser = require('body-parser');
 var multer = require('multer'); // v1.0.5
@@ -52,9 +54,7 @@ async function getOne(req){
 };
 
 async function createObject(req, res){
-	console.log("?");
     const collection = (await connection.open())[req.params.collection];
-	console.log("?ASDF?");
     const elem = req.body;
     if(schemas.isNotValid(req.params.collection, elem))
 		return errors.NOT_VALID;
@@ -62,6 +62,24 @@ async function createObject(req, res){
     await collection.insertOne(elem);
     return [200, elem._id];
 };
+
+async function createUser(req){
+	const user = req.body;
+	if(schemas.isNotValid("NewUser", user))
+		return errors.NOT_VALID;
+	const collection = (await connection.open())["User"];
+    const one = await collection.findOne({username: user.username});
+    if(one)
+		return errors.NAME_TAKEN;
+    user._id = uuid();
+	const cookie = user._id + "$" + (crypto.createHash('sha256')
+									 .update(user.password)
+									 .digest('base64'));
+	delete user.password;
+	user.cookie = cookie;
+    await collection.insertOne(user);
+    return [200, {success:true, cookie}];
+}
 
 async function updateObject(req){
     const collection = (await connection.open())[req.params.collection];
@@ -95,14 +113,14 @@ async function patchObject(req){
 		req.params.id = id;
 		delete old._id;
 		req.body = old;
-		await updateRecipe(req);
+		await updateObject(req);
 		return errors.NOT_VALID;
 	}
 	cur._id = req.params.id;
 	return [200, cur];
 };
 
-async function deleteRecipe(req){
+async function deleteObject(req){
     const collection = (await connection.open())[req.params.collection];
     const res = await collection.deleteOne({_id: req.params.id});
     if(!res.result.n)
@@ -111,6 +129,7 @@ async function deleteRecipe(req){
 };
 
 async function dropCollection(req){
+	console.log("Dropping Table:", req.params.collection);
     try{
 		const collection = (await connection.open())[req.params.collection];
 		await collection.drop();
@@ -129,18 +148,43 @@ function resolver(p){
 		p.then(data => resolve(data)).catch(err => resolve(new Error(err)));
     });
     return promise;
-};
+}
 
-function bind(fn){
+async function getUser(req){
+	const cookie = req.headers["x-authcookie"];
+    if(cookie){
+		const collection = (await connection.open())["User"];
+		const user = await collection.findOne({
+			cookie
+		});
+		if(user)
+			return user;
+    }
+    return false;
+}
+
+function bind(fn, priv, path){
     return async(req, res, next) => {
+		console.log(req.headers);
+		let user = null;
+		let calling = fn;
+		if(priv){
+			user = await getUser(req, res, next);
+			if(!user){
+				calling = priv;
+			}
+		}
 		try{
-			console.log("headers", req.headers);
-			const result = await (utils.on_die(fn, errorClose).call(this, req, res, next));
+			const result = await (utils.on_die(calling, errorClose).call(this, req, res, next, user));
+			if(!result)
+				return;
 			const code = result[0];
 			if(result[1] === undefined)
 				res.status(code).send("");
-			else
+			else if(typeof result[1] !== "string")
 				res.status(code).json(result[1]);
+			else
+				res.status(code).send(result[1]);
 		}catch(e){
 			res.status(500).json({error:"Something fucked up bad. Probably mongodb isn't running", meme:"https://http.cat/500"});
 		}
@@ -154,11 +198,41 @@ function webAPI(api, port){
 		const list = api[methodName];
 		for(let i = 0; i < list.length; ++i){
 			const def = list[i];
-			app[name](def[0], upload.array(), bind(def[1]));
+			app[name](def[0], upload.array(), bind(def[1], def[2], def[0]));
 		}
     }
-	console.log("live");
-    app.listen(port);
+    app.listen(port, function() {
+		console.log("Your server is now listening on port 3000! Navigate to http://localhost:3000 to access it");
+
+		if (process && process.send) process.send({done: true}); // ADD THIS LINE
+    });
+    
+}
+
+async function login(req, res, path){
+    const usnm = req.body.username,
+		  pass = req.body.password;
+    const collection = (await connection.open())["User"];
+	const user = await collection.findOne({
+		username:usnm
+	});
+
+	if(!user)
+		return errors.NO_SUCH_USER;
+	
+	const cookie = user._id + "$" + crypto.createHash('sha256')
+          .update(pass)
+          .digest('base64');
+
+	
+    if(user.cookie == cookie){
+		return [200, {cookie, success:true}];
+    }
+    return errors.BAD_PASSWORD;
+}
+
+function privateBlocked(){
+	return [401, {meme:"https://http.cat/401", error:"Not Logged in"}];
 }
 
 let port = 3000;
@@ -166,22 +240,30 @@ try{
     port = process.env.PORT || port;
 }catch(e){}
 
+try{
+	dropCollection({params:{
+		collection:"User"
+	}});
+}catch(e){}
+
 webAPI({
     GET: [
-		["/store/:collection", getAll],
-		["/store/:collection/:id", getOne]
+		["/store/:collection", getAll, privateBlocked],
+		["/store/:collection/:id", getOne, privateBlocked]
     ],
     POST: [
-		["/store/:collection", createObject],
+		["/store/:collection", createObject, privateBlocked],
+		["/users/new", createUser],
+		["/users/login", login]
     ],
     PUT: [
-		["/store/:collection/:id", updateObject]
+		["/store/:collection/:id", updateObject, privateBlocked]
     ],
     PATCH: [
-		["/store/:collection/:id", patchObject]
+		["/store/:collection/:id", patchObject, privateBlocked]
     ],
     DELETE:[
-		["/store/:collection/:id", deleteRecipe],
-		["/store/:collection", dropCollection]
+		["/store/:collection/:id", deleteObject, privateBlocked],
+		["/store/:collection", dropCollection, privateBlocked]
     ]
 }, port);

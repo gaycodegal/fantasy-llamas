@@ -1,3 +1,11 @@
 {"Spell":
- {"name":"string","level":"number","school":"string","time":"string","range":"string","components":"string","duration":"string"}
+ {"name":"string","level":"number","school":"string","time":"string","range":"string","components":"string","duration":"string"},
+ "User":{
+	 "cookie": "string",
+	 "username": "string"
+ },
+ "NewUser":{
+	 "password": "string",
+	 "username": "string"
+ }
 }
