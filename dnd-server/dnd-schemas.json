@@ -1,5 +1,27 @@
 {"Spell":
  {"name":"string","level":"number","school":"string","time":"string","range":"string","components":"string","duration":"string"},
+ "Item":{"name":"string","type":"string"},
+ "Character":
+ {"inventory":["<Item>"],
+  "spells":["<Spell>"],
+  "level":"number",
+  "name":"string",
+  "backstory":"string",
+  "background":"string",
+  "stats":["<Stat>"],
+  "skillproficiency":["<Proficiency>"],
+  "otherproficiency":["string"],
+  "proficiencybonus":"number",
+  "inspiration":"number",
+  "speed":"number",
+  "alignment":"string",
+  "experiencepoints":"number",
+  "featuresandtraits":["string"],
+  "money":"number",
+  "hitdice":"number"},
+ "Stat":{"name":"string","number":"number"},
+ "Proficiency":{"name":"string","number":"number"},
+ 
  "User":{
 	 "cookie": "string",
 	 "username": "string"

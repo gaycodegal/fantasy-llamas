@@ -27,6 +27,9 @@ function valid(schema, focus){
 		}
 		return true;
     }
+	if(typeof type === "string" && type[0] == '<' && type[type.length - 1] == '>'){
+		return valid(schemas[type.substring(1,type.length - 1)], focus);
+	}
     return focus === schema;
 }
 
