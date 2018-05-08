@@ -55,7 +55,12 @@ These pages are intended for demonstration purposes only, as login sessions do n
 	Two pages have the same origin if the protocol, port (if one is specified), and host are the same for both pages.
 
 
+## User Authentication
+
+Users can authenticate by posting their credentials to `/users/login`. They will recieve back a JSON object with a `cookie` key. This "cookie" (not actually a cookie) needs to be passed alongside all requests as the `x-authcookie` header. In practice, you can simply use [user-requests.js](public/js/user-requests.js), which already has code for handling login, logout, and attaching proper headers for requests to the server. Example usage of requests can be seen in [demo.js](public/js/demo.js). In practice, you could just slurp the login and logout pages into a build if you serve them with the html/js/css server.
+
 ## Schemas
 
-Schemas are strictly checked, and are located in [dnd-schemas.json](dnd-schemas.json).
+Schemas are strictly checked, and are located in [dnd-schemas.json](dnd-schemas.json). Schema errors will result in the `errors.NOT_VALID` [error](errors.js).
+
 
