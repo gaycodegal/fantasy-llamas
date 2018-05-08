@@ -74,6 +74,7 @@ async function createUser(req){
     if(one)
 		return errors.NAME_TAKEN;
     user._id = uuid();
+	user.characters = [];
 	const cookie = user._id + "$" + (crypto.createHash('sha256')
 									 .update(user.password)
 									 .digest('base64'));

@@ -24,7 +24,8 @@
  
  "User":{
 	 "cookie": "string",
-	 "username": "string"
+	 "username": "string",
+	 "characters": ["string"]
  },
  "NewUser":{
 	 "password": "string",
