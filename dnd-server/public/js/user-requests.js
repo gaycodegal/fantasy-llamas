@@ -1,5 +1,5 @@
+const port = "3001";
 const redirecturl = "/home.html";
-
 window.addEventListener("load", ()=>{
 	const login = document.getElementById("login");
 	if(login){
@@ -17,6 +17,8 @@ window.addEventListener("load", ()=>{
 			if(resp.success){
 				console.log(resp.cookie);
 				localStorage.setItem("cookie", resp.cookie);
+			}else{
+				alert("Something went wrong. Error: " + resp.error);
 			}
 			window.location.href = redirecturl;
 			return false;
@@ -24,7 +26,12 @@ window.addEventListener("load", ()=>{
 	}
 });
 
+function logout(){
+	localStorage.clear();
+}
+
 function request(method, path, data){
+	path = window.location.protocol + "//" + window.location.hostname + ":" + port + path;
 	const promise = new Promise((resolve, reject)=>{
 		const cookie = localStorage.getItem("cookie");
 		function reqListener () {

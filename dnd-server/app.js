@@ -238,7 +238,7 @@ function privateBlocked(){
 	return [401, {meme:"https://http.cat/401", error:"Not Logged in"}];
 }
 
-let port = 3000;
+let port = 3001;
 try{
     port = process.env.PORT || port;
 }catch(e){}
