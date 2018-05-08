@@ -6,7 +6,8 @@ const errors = require("./errors");
 
 
 const crypto = require("crypto");
-var app = require('express')();
+const express = require('express');
+var app = express();
 var bodyParser = require('body-parser');
 var multer = require('multer'); // v1.0.5
 var upload = multer(); // for parsing multipart/form-data
@@ -65,6 +66,7 @@ async function createObject(req, res){
 
 async function createUser(req){
 	const user = req.body;
+	console.log(user);
 	if(schemas.isNotValid("NewUser", user))
 		return errors.NOT_VALID;
 	const collection = (await connection.open())["User"];
@@ -239,13 +241,14 @@ let port = 3000;
 try{
     port = process.env.PORT || port;
 }catch(e){}
-
+/*
 try{
 	dropCollection({params:{
 		collection:"User"
 	}});
 }catch(e){}
-
+*/
+app.use(express.static('public'));
 webAPI({
     GET: [
 		["/store/:collection", getAll, privateBlocked],
