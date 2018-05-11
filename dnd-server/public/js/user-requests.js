@@ -44,7 +44,6 @@ function request(method, path, data) {
         request.setRequestHeader("x-path", path);
         if (cookie && cookie.length)
             request.setRequestHeader("x-authcookie", cookie);
-        console.log("sending", data);
         if (data) {
             request.setRequestHeader('Content-Type', 'application/json');
             request.send(JSON.stringify(data));

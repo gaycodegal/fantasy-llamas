@@ -56,30 +56,3 @@ async function Character(data) {
     </div>`, ...data.stats.map((stat, i) => Stat(stat)), ...data.inventory.map((item, i) => Item(item)), ...data.spells.map((spell, i) => Spell(spell)));
     return content;
 }
-
-async function main() {
-    const c = await Character({
-        "inventory": [],
-        "spells": [],
-        "level": 1,
-        "name": "string",
-        "backstory": "pain & also bad childhood. fuck parents. There is blood in my fucking eyes.",
-        "background": "depression",
-        "class": "string",
-        "race": "string",
-        "stats": [{ "name": "desire for life", "value": 0 }, { "name": "gay for life", "value": 9001 }],
-        "skillproficiency": [],
-        "otherproficiency": ["string"],
-        "proficiencybonus": 1,
-        "inspiration": -1,
-        "speed": 1,
-        "alignment": "string",
-        "experiencepoints": 1,
-        "featuresandtraits": ["string"],
-        "money": 1337,
-        "hitdice": 520
-    });
-    console.log(c.html());
-    $("body").append(c);
-}
-main();
