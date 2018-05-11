@@ -19,7 +19,7 @@ async function Character(data) {
     <br/>
     
     <div> Inspiration: ${ data.inspiration } </div>
-    <div> Stats: ${ 
+    <div> hello Stats: ${ 
         phn(data.stats.length)
          } </div>
     <div> Skill Proficiency: ${ phn(data.skillproficiency.length) } </div>
@@ -67,10 +67,14 @@ Character.blank = {
     "class": "Pick A Class",
     "race": "This Sentence is a Race Condition",
     "stats": [
-		{name: "int", value: 0},
-		{name: "dex", value: 0},
-		{name: "str", value: 0}
-	],
+        { name: "Strength", value: 0 },
+        { name: "Dexterity", value: 0 },
+        { name: "Constitution", value: 0 },
+        { name: "Intelligence", value: 0 },
+        { name: "Wisdom", value: 0 },
+        { name: "Charisma", value: 0 }
+
+    ],
     "skillproficiency": [],
     "otherproficiency": [],
     "proficiencybonus": 0,
