@@ -1,4 +1,4 @@
-const redirecturl = "/home.html";
+const redirecturl = "/home";
 window.addEventListener("load", () => {
     const login = document.getElementById("login");
     if (login) {
