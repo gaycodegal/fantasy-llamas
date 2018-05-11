@@ -44,21 +44,3 @@ function make(format, classes) {
 function reload(){
 	window.location.reload();
 }
-
-function uploader(object, store){
-	return function(prop, callback){
-		return async function(val){
-			object[prop] = val;
-			const id = object._id;
-			delete object._id;
-			const retval = (await request("put", `/store/${store}/${id}`, object));
-			object._id = id;
-			if(retval.status != 200)
-				return false;
-			object = JSON.parse(retval.responseText);
-			if(callback)
-				callback();
-			return true;
-		}
-	}
-}

@@ -1,74 +1,35 @@
-function easyedit(data, name, type, putter, callback){
-	return new EditorFor(data[name], type, putter(name, callback));
-}
-
-class EditorFor{
-	constructor(data, type, callback){
-		this.type = type;
-		this.data = data;
-		this.editing = false;
-		this.callback = callback;
-		this.editMe = this.editMe.bind(this);
-	}
-
-	makeEditor(){
-		if(typeof this.type !== "string"){
-			return;
-		}
-		const old = this.main;
-		this.main = $(`<input type="${this.type}" value="${this.data}"></input>`);
-		old.replaceWith(this.main);		
-	}
-
-	makeDisplay(){
-		const old = this.main;
-		this.main = $(`<span>${this.data}</span>`);
-		old.replaceWith(this.main);
-	}
-
-	async editMe(){
-		this.editing = !this.editing;
-		if(this.editing){
-			this.makeEditor();
-			this.button.text("Done");
-		}else{
-			const old = this.data;
-			this.data = this.main.val();
-			if(this.type == "number"){
-				this.data = parseFloat(this.data);
-			}
-			if(this.callback){
-				if(!await this.callback(this.data)){
-					this.data = old;
-					alert("Invalid Edit");
-				}
-			}
-			this.makeDisplay();
-			this.button.text("Edit");
-		}
-	}
-
-	content(){
-		this.button = $("<button>Edit</button>");
-		this.button.click(this.editMe);
-		this.container = $("<div></div>");
-		this.main = $(`<span>${this.data}</span>`);
-		this.container.append(this.main, " ", this.button);
-		return this.container
-	}
-
-}
 async function EditCharacter(data) {
     data = await data;
 	const putter = uploader(data, "Character");
+	const newitem = $("<button>New Item</button>");
+	const newspell = $("<button>New Spell</button>")
+	const newoprof = $("<button>New Proficiency</button>");
+	const newtrait = $("<button>New Trait</button>");
+	newitem.click(async (x)=>{
+		data.inventory.push(null);
+		putter(["inventory", data.inventory.length - 1],reload)(Item.blank);	
+	});
+	newspell.click(async (x)=>{
+		data.spells.push(null);
+		putter(["spells", data.spells.length - 1],reload)(Spell.blank);		
+	});
+	newoprof.click(async (x)=>{
+		data.otherproficiency.push("");
+		putter(["otherproficiency", data.otherproficiency.length - 1],reload)("edit me");		
+	});
+	newtrait.click(async (x)=>{
+		data.featuresandtraits.push("");
+		putter(["featuresandtraits", data.featuresandtraits.length - 1],reload)("edit me");		
+	});
+		
     let content = await make(`<div>
     <div>
-        <span> Name: ${ ph() } </span> 
-        <span> Class: ${ph()} </span>
-        <span> Level: ${ph()} </span> 
-        <span> Race: ${ph()} </span>
-        <span> Alignment: ${ph()} </span>
-        <span> Experience Points: ${ph() } </span>
+        <div> Name: ${ ph() } </div> 
+        <div> Class: ${ph()} </div>
+        <div> Level: ${ph()} </div> 
+        <div> Race: ${ph()} </div>
+        <div> Alignment: ${ph()} </div>
+        <div> Experience Points: ${ph() } </div>
     </div>
     <br/>
     
@@ -76,7 +37,6 @@ async function EditCharacter(data) {
     <div> Stats: ${ 
         phn(data.stats.length)
          } </div>
-    <div> Skill Proficiency: ${ phn(data.skillproficiency.length) } </div>
     <br/>
 
     <div> Armor Class: ${Math.sin(data.inspiration) * 100 * data.level | 0} </div>
@@ -90,20 +50,20 @@ async function EditCharacter(data) {
     
 
 
-    <div> Inventory: ${ phn(data.inventory.length)} </div> 
+    <div> Inventory: ${ phn(data.inventory.length)} ${ph()} </div> 
     <br/>
     <div> Spells: ${ phn(data.spells.length)
-         } </div> 
+         } ${ph()} </div> 
     <br/>
     <div> Backstory: ${ ph() } </div>
     
 
-    <div> Other Proficiency: ${ data.otherproficiency } </div>
+    <div> Other Proficiency: ${ phn(data.otherproficiency.length)} ${ph()} </div>
     
 
     
     
-    <div> Features and Traits: ${ data.featuresandtraits } </div>
+    <div> Features and Traits: ${ phn(data.featuresandtraits.length) } ${ph()} </div>
     <div> Money: ${ ph() } </div>
     
     
@@ -116,12 +76,19 @@ async function EditCharacter(data) {
 							 easyedit(data, "experiencepoints", "number", putter),
 							 easyedit(data, "inspiration", "number", putter, reload),
 							 
-							 ...data.stats.map((stat, i) => Stat(stat)), ...data.skillproficiency.map((prof, i) => Proficiency(prof)),
+							 ...data.stats.map((stat, i) => EditStat(data, i, putter)), ...data.skillproficiency.map((prof, i) => Proficiency(prof)),
 							 easyedit(data, "speed", "number", putter),
 							 easyedit(data, "hp", "number", putter),
-							 ...data.inventory.map((item, i) => Item(item)), ...data.spells.map((spell, i) => Spell(spell)),
+							 ...data.inventory.map((item, i) => EditItem(data, i, putter)),
+							 newitem,
+							 ...data.spells.map((spell, i) => EditSpell(data, i, putter)),
+							 newspell,
 							 easyedit(data, "backstory", "text", putter),
+							 ...data.otherproficiency.map((x,i)=>EditString(data, i, "otherproficiency", putter)),
+							 newoprof,
 							 //easyedit(data, "featuresandtraits", "text", putter),
+							 ...data.featuresandtraits.map((x,i)=>EditString(data, i, "featuresandtraits", putter)),
+							 newtrait,
 							 easyedit(data, "money", "number", putter),
 							 );
     return content;

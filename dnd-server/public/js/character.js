@@ -66,7 +66,11 @@ Character.blank = {
     "background": "Mysterious",
     "class": "Pick A Class",
     "race": "This Sentence is a Race Condition",
-    "stats": [],
+    "stats": [
+		{name: "int", value: 0},
+		{name: "dex", value: 0},
+		{name: "str", value: 0}
+	],
     "skillproficiency": [],
     "otherproficiency": [],
     "proficiencybonus": 0,

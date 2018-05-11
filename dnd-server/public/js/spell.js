@@ -1,7 +1,7 @@
 async function Spell(data) {
     data = await data;
     //console.log(data);
-    let content = await make(`<div>
+    let content = await make(`<div class="spell">
             <span> name: ${ data.name } </span> 
             <span> level: ${ data.level } </span> 
             <span> school: ${ data.school } </span> 
@@ -12,3 +12,5 @@ async function Spell(data) {
             </div>`);
     return content;
 }
+
+Spell.blank = { "name": "edit me", "level": 0, "school": "edit me", "time": "edit me", "range": "edit me", "components": "edit me", "duration": "edit me" };
