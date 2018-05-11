@@ -95,7 +95,7 @@ async function EditCharacter(data) {
     <div> Spells: ${ phn(data.spells.length)
          } </div> 
     <br/>
-    <div> Backstory: ${ data.backstory } </div>
+    <div> Backstory: ${ ph() } </div>
     
 
     <div> Other Proficiency: ${ data.otherproficiency } </div>
@@ -104,7 +104,7 @@ async function EditCharacter(data) {
     
     
     <div> Features and Traits: ${ data.featuresandtraits } </div>
-    <div> Money: ${ data.money } </div>
+    <div> Money: ${ ph() } </div>
     
     
     </div>`,
@@ -119,28 +119,10 @@ async function EditCharacter(data) {
 							 ...data.stats.map((stat, i) => Stat(stat)), ...data.skillproficiency.map((prof, i) => Proficiency(prof)),
 							 easyedit(data, "speed", "number", putter),
 							 easyedit(data, "hp", "number", putter),
-							 ...data.inventory.map((item, i) => Item(item)), ...data.spells.map((spell, i) => Spell(spell)));
+							 ...data.inventory.map((item, i) => Item(item)), ...data.spells.map((spell, i) => Spell(spell)),
+							 easyedit(data, "backstory", "text", putter),
+							 //easyedit(data, "featuresandtraits", "text", putter),
+							 easyedit(data, "money", "number", putter),
+							 );
     return content;
 }
-
-Character.blank = {
-    "inventory": [],
-    "spells": [],
-    "level": 0,
-    "name": "Unnamed Bloke",
-    "backstory": "You have yet to tell this story.",
-    "background": "Mysterious",
-    "class": "Pick A Class",
-    "race": "This Sentence is a Race Condition",
-    "stats": [],
-    "skillproficiency": [],
-    "otherproficiency": [],
-    "proficiencybonus": 0,
-    "inspiration": 0,
-    "speed": 0,
-    "alignment": "Unaligned",
-    "experiencepoints": 0,
-    "featuresandtraits": [],
-    "money": 0,
-    "hp": 1
-};
