@@ -6,6 +6,13 @@ function phn(n) {
     return (new Array(n)).fill(ph()).join("");
 }
 
+async function N(lst){
+	for(let i = 0; i < lst.length; ++i){
+		lst[i] = await lst[i];
+	}
+    return lst;
+}
+
 /**
  * @param <string> format html minus classes
  * @param <class*> classes what need to insert

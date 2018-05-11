@@ -20,10 +20,10 @@
         "experiencepoints": "number",
         "featuresandtraits": ["string"],
         "money": "number",
-        "hitdice": "number"
+        "hp": "number"
     },
     "Stat": { "name": "string", "value": "number" },
-    "Proficiency": { "name": "string", "number": "number" },
+    "Proficiency": { "name": "string", "value": "number" },
 
     "User": {
         "cookie": "string",

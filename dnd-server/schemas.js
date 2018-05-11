@@ -1,6 +1,7 @@
 const schemas = require("./dnd-schemas");
 
 function valid(schema, focus) {
+	console.log(schema, focus);
     if (Array.isArray(schema)) {
         if (!Array.isArray(focus))
             return false;

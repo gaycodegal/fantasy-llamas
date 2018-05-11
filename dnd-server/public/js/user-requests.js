@@ -16,6 +16,7 @@ window.addEventListener("load", () => {
             if (resp.success) {
                 console.log(resp.cookie);
                 localStorage.setItem("cookie", resp.cookie);
+				localStorage.setItem("uuid", (await request("get", "/whoami")).responseText);
             } else {
                 alert("Something went wrong. Error: " + resp.error);
             }

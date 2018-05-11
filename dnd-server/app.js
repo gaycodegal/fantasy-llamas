@@ -19,6 +19,12 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
+var exphbs  = require('express-handlebars');
+ 
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
+
+
 /**
    checks that arguments are of the correct type.
    @param {Arguments|Array} args - The arguments to the function
@@ -62,6 +68,10 @@ async function getOne(req) {
         return errors.NOT_FOUND;
     return [200, one];
 };
+
+async function whoami(req, res, next, user){
+	return [200, user._id];
+}
 
 async function createObject(req, res) {
     const collection = (await connection.open())[req.params.collection];
@@ -201,7 +211,7 @@ function bind(fn, priv, path) {
     };
 }
 
-function webAPI(api, port) {
+function webAPI(api) {
     for (let methodName in api) {
         const name = methodName.toLowerCase();
         //const method = app[];
@@ -211,12 +221,6 @@ function webAPI(api, port) {
             app[name](def[0], upload.array(), bind(def[1], def[2], def[0]));
         }
     }
-    app.listen(port, function() {
-        console.log("Your server is now listening on port 3000! Navigate to http://localhost:3000 to access it");
-
-        if (process && process.send) process.send({ done: true }); // ADD THIS LINE
-    });
-
 }
 
 async function login(req, res, path) {
@@ -260,6 +264,7 @@ app.use(express.static('public'));
 webAPI({
     GET: [
         ["/store/:collection", getAll, privateBlocked],
+		["/whoami", whoami, privateBlocked],
         ["/store/:collection/:id", getOne, privateBlocked]
     ],
     POST: [
@@ -277,4 +282,25 @@ webAPI({
         ["/store/:collection/:id", deleteObject, privateBlocked],
         ["/store/:collection", dropCollection, privateBlocked]
     ]
-}, port);
+});
+const fs = require("fs");
+app.get("/:path", function(req, res, next){
+	const path = "public/pages/" + req.params.path + ".page.js";
+	console.log(path);
+	console.log(req.params.path);
+	if(fs.existsSync(path)){
+		fs.readdir("public/js/", function(err, items) {
+			res.render('general', {path:req.params.path, source:items.filter((x)=>{
+				return x.endsWith(".js");
+			})});
+		});
+				  
+	}else{
+		next();
+	}
+});
+app.listen(port, function() {
+    console.log("Your server is now listening on port 3000! Navigate to http://localhost:3000 to access it");
+	
+    if (process && process.send) process.send({ done: true }); // ADD THIS LINE
+});
