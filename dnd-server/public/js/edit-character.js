@@ -24,11 +24,11 @@ async function EditCharacter(data) {
 
     let content = await make(`<div>
     <div>
-        <div> Name: ${ ph() } </div> 
-        <div> Class: ${ph()} </div>
-        <div> Level: ${ph()} </div> 
-        <div> Race: ${ph()} </div>
-        <div> Alignment: ${ph()} </div>
+        <span> Name: ${ ph() } </span> 
+        <span> Class: ${ph()} </span>
+        <span> Level: ${ph()} </span> 
+        <span> Race: ${ph()} </span>
+        <span> Alignment: ${ph()} </span>
         <div> Experience Points: ${ph() } </div>
     </div>
     <br/>
@@ -63,7 +63,7 @@ async function EditCharacter(data) {
 	<div> Persuasion: ${Math.floor((data.stats[5].value-10)/2)}</div>
 	<br/>
 
-    <div> Armor Class: ${Math.sin(data.inspiration) * 100 * data.level | 0} </div>
+    <div> Armor Class: ${ph()} </div>
     <div> Initiative: ${Math.floor((data.stats[1].value-10)/2)} </div>
     <div> Speed:${ph()} </div>
     
@@ -106,7 +106,8 @@ async function EditCharacter(data) {
         easyedit(data, "experiencepoints", "number", putter),
         easyedit(data, "inspiration", "number", putter, reload),
 
-        ...data.stats.map((stat, i) => EditStat(data, i, putter)), ...data.skillproficiency.map((prof, i) => Proficiency(prof)),
+        ...data.stats.map((stat, i) => EditStat(data, i, putter, reload)), ...data.skillproficiency.map((prof, i) => Proficiency(prof)),
+        easyedit(data, "armor", "number", putter),
         easyedit(data, "speed", "number", putter),
         easyedit(data, "hp", "number", putter),
         ...data.inventory.map((item, i) => EditItem(data, i, putter)),

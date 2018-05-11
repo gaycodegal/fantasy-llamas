@@ -15,6 +15,7 @@
         "otherproficiency": ["string"],
         "proficiencybonus": "number",
         "inspiration": "number",
+        "armor": "number",
         "speed": "number",
         "alignment": "string",
         "experiencepoints": "number",

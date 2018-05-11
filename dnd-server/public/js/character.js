@@ -19,13 +19,13 @@ async function Character(data) {
     <br/>
     
     <div> Inspiration: ${ data.inspiration } </div>
-    <div> hello Stats: ${ 
+    <div> Stats: ${ 
         phn(data.stats.length)
          } </div>
     <div> Skill Proficiency: ${ phn(data.skillproficiency.length) } </div>
     <br/>
 
-    <div> Armor Class: ${Math.sin(data.inspiration) * 100 * data.level | 0} </div>
+    <div> Armor Class: ${data.armor} </div>
     <div> Initiative: ${Math.cos(data.inspiration) * 100 * data.level | 0} </div>
     <div> Speed:${data.speed} </div>
     
@@ -79,6 +79,7 @@ Character.blank = {
     "otherproficiency": [],
     "proficiencybonus": 0,
     "inspiration": 0,
+    "armor": 0,
     "speed": 0,
     "alignment": "Unaligned",
     "experiencepoints": 0,
