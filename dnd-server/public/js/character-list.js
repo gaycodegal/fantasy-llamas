@@ -1,6 +1,18 @@
 async function CharacterList(user) {
 	function CharacterName(character){
-		return $(`<li><a href="/edit-character?character=${character._id}">${character.name}</a></li>`);
+		const button = $("<button>Delete</button>");
+		button.click(async ()=>{
+			if(confirm("Delete " + character.name + "?")){
+				await request("delete", "/store/Character/" + character._id);
+				user.characters.splice(user.characters.indexOf(character._id), 1);
+				const uid = user._id;
+				delete user._id;
+				user = JSON.parse((await request("put", "/store/User/" + uid, user)).responseText);
+				
+				window.location.reload();
+			}
+		});
+		return make(`<li><a href="/edit-character?character=${character._id}">${character.name}</a> ${ph()}</li>`, button);
 	}
     user = await user;
 	const characters = await N(user.characters.map(async(id)=>{

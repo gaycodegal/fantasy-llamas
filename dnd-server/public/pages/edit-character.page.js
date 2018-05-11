@@ -1,12 +1,10 @@
 async function main() {
 	const me = localStorage.getItem("uuid");
-	const url = new URL(url_string);
+	const url = new URL(window.location.href);
 	const char_id = url.searchParams.get("character");
-	
-    resp = await request("get", "/store/User/"+me); // drop table Character
-	const user = JSON.parse(resp.responseText);
-    console.log(user);
-    const c = await CharacterList(user);
+    const character = JSON.parse((await request("get", "/store/Character/"+char_id)).responseText);
+	console.log(character);
+    const c = await EditCharacter(character);
     $("body").append(c);
 }
 main();
