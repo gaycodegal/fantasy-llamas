@@ -26,8 +26,12 @@ function make(format, classes) {
         if (todo == 0)
             resolve(content);
         phs.each(async(i, x) => {
-
-            $(x).replaceWith(await args[i + 1]);
+			const elem = await args[i + 1]
+			if(elem.content){
+				$(x).replaceWith(await elem.content());
+			}else{
+				$(x).replaceWith(elem);
+			}
             --todo;
             if (todo == 0) {
                 resolve(content);
@@ -35,4 +39,26 @@ function make(format, classes) {
         });
     });
     return p;
+}
+
+function reload(){
+	window.location.reload();
+}
+
+function uploader(object, store){
+	return function(prop, callback){
+		return async function(val){
+			object[prop] = val;
+			const id = object._id;
+			delete object._id;
+			const retval = (await request("put", `/store/${store}/${id}`, object));
+			object._id = id;
+			if(retval.status != 200)
+				return false;
+			object = JSON.parse(retval.responseText);
+			if(callback)
+				callback();
+			return true;
+		}
+	}
 }

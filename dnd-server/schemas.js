@@ -24,6 +24,7 @@ function valid(schema, focus) {
         if (Object.keys(focus).length != Object.keys(schema).length)
             return false;
         for (const key in schema) {
+			console.log(key);
             if (!focus.hasOwnProperty(key))
                 return false;
             if (!valid(schema[key], focus[key]))
