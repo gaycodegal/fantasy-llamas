@@ -1,5 +1,9 @@
-class Welcome extends React.Component {
+import React, { Component } from 'react';
+
+class LoginForm extends Component {
   render() {
-    return <h1>Hello, {this.props.name}</h1>;
+      return <br>
   }
 }
+//	<script src="/js/user-requests.js"></script>
+
