@@ -2,5 +2,4 @@
     "url": "mongodb://localhost:27017/",
     "db": "fantasy-llamas-dnd-db",
     "collections": ["Character", "Spell", "Item", "User", "Stat", "Proficiency"]
-
 }

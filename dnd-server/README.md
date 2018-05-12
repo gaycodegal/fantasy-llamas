@@ -15,6 +15,18 @@ You'll need to install MongoDB, node, and npm.
 Run `npm init` in this directory.
 
 
+## Running
+
+1. Launch mongod
+2. You can insert your mongo credentials into the url in settings.json
+3. `npm start` to start the server. 
+
+
+## Seeding
+
+No need to seed! Just run and visit [http://localhost:3000/](http://localhost:3000/) to go to the account creation page, make an account and use it as a new user would.
+
+
 ## REST API
 
 You can find the method description of the REST API at the bottom of [app.js](app.js) a cached version is below:

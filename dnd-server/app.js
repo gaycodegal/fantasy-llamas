@@ -245,6 +245,13 @@ async function login(req, res, path) {
     return errors.BAD_PASSWORD;
 }
 
+function redirect(site){
+    return async(req, res) => {
+		res.redirect(site);
+		return;
+    }
+}
+
 function privateBlocked() {
     return [401, { meme: "https://http.cat/401", error: "Not Logged in" }];
 }
@@ -263,6 +270,7 @@ try{
 app.use(express.static('public'));
 webAPI({
     GET: [
+		["/",redirect("/new")],
         ["/store/:collection", getAll, privateBlocked],
 		["/whoami", whoami, privateBlocked],
         ["/store/:collection/:id", getOne, privateBlocked]
