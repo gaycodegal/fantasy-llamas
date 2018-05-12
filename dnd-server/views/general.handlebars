@@ -1,13 +1,27 @@
 <!doctype html>
 <html>
-  <header>
+  <head>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+	<script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
 	<link type="text/css" rel="stylesheet" href="/css/general.css"/>
-  </header>
+  </head>
 
   <body>
+	<main></main>
 	{{#each source}}
 	<script src="/js/{{{this}}}"></script>
 	{{/each}}
+	<script>
+	  (async function () {
+	  const me = localStorage.getItem("uuid");
+      resp = await request("get", "/store/User/" + me);
+	  const user = JSON.parse(resp.responseText);
+      //console.log(user);
+      const c = await Toolbar(user);
+      $("body").prepend(c);
+	  })();
+	</script>
     <script src="/pages/{{{path}}}.page.js"></script>
   </body>
 

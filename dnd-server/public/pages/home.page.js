@@ -4,6 +4,6 @@ async function main() {
 	const user = JSON.parse(resp.responseText);
     console.log(user);
     const c = await CharacterList(user);
-    $("body").append(c);
+    $("main").first().append(c);
 }
 main();

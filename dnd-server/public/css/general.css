@@ -5,3 +5,23 @@
 	padding:5px;
 	margin:2px;
 }
+
+main{
+	margin: 8px;
+}
+
+body{
+	margin: 0px;
+}
+
+.material-text{	
+     font-family: Roboto,sans-serif;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+}
+
+.log-link{
+	margin: 0px 10px;
+	color: white;
+	text-decoration:none;
+}

@@ -34,6 +34,6 @@ async function main() {
     console.log(retrieved);
 
     const c = await Character(retrieved);
-    $("body").append(c);
+    $("main").first().append(c);
 }
 main();

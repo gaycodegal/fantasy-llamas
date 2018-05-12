@@ -5,6 +5,6 @@ async function main() {
     const character = JSON.parse((await request("get", "/store/Character/"+char_id)).responseText);
 	console.log(character);
     const c = await EditCharacter(character);
-    $("body").append(c);
+    $("main").first().append(c);
 }
 main();
