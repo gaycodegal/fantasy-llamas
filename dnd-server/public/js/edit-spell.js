@@ -18,7 +18,7 @@ async function EditSpell(character, i, putter, callback) {
 							 new EditorFor(data.components, "string", putter(["spells", i, "components"], callback, data)),
 							 new EditorFor(data.duration, "string", putter(["spells", i, "duration"], callback, data))
 							);
-	const button = $("<button>Delete</button>");
+	const button = $("<button class='mdc-button'>Delete</button>");
 	button.click(async (x)=>{
 		if(confirm("Really delete " + fetch(character, ["spells", i, "name"]) + "?")){
 			character.spells.splice(i, 1);

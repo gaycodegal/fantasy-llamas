@@ -49,7 +49,7 @@ class EditorFor{
 	}
 	
 	content(){
-		this.button = $("<button>Edit</button>");
+		this.button = $("<button class='mdc-button'>Edit</button>");
 		this.button.click(this.editMe);
 		this.container = $("<span></span>");
 		this.main = $(`<span>${this.data}</span>`);

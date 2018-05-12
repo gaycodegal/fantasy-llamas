@@ -1,7 +1,8 @@
 async function CharacterList(user) {
-	function CharacterName(character){
-		const button = $("<button>Delete</button>");
-		button.click(async ()=>{
+	async function CharacterName(character){
+		const button = $("<button class='mdc-button'>Delete</button>");
+		button.click(async (e)=>{
+			e.preventDefault();
 			if(confirm("Delete " + character.name + "?")){
 				await request("delete", "/store/Character/" + character._id);
 				user.characters.splice(user.characters.indexOf(character._id), 1);
@@ -12,7 +13,10 @@ async function CharacterList(user) {
 				window.location.reload();
 			}
 		});
-		return make(`<li><a href="/edit-character?character=${character._id}">${character.name}</a> ${ph()}</li>`, button);
+		const li = await make(`<li class="mdc-list-item">${character.name}&nbsp;&nbsp; ${ph()}</li>`, button);
+		console.log(li);
+		li.click(x=>{window.location.href="/edit-character?character=" + character._id});
+		return li;
 	}
     user = await user;
 	const characters = await N(user.characters.map(async(id)=>{
@@ -21,9 +25,8 @@ async function CharacterList(user) {
 		return retrieved;
 	}));
 	console.log(characters);
-	const newlink = $("<a href='/edit-character'>New Character</a>");
-	newlink.click(async (e)=>{
-		e.preventDefault();
+	const newli = $("<li class='mdc-list-item'>New Character</li>");
+	newli.click(async (e)=>{
 		let c = Object.assign({}, Character.blank);
 		c = (await request("post", "/store/Character", c)).responseText;
 		user.characters.push(c);
@@ -34,9 +37,9 @@ async function CharacterList(user) {
 		window.location.href = "/edit-character?character=" + c;
 		return true;
 	});
-    let content = await make(`<div><ul>
+    let content = await make(`<div class="character-list"><ul class="mdc-list">
 ${ phn(characters.length)}
-<li>${ph()}</li>
-<ul></div>`, ...characters.map((t) => CharacterName(t)), newlink);
+${ph()}
+<ul></div>`, ...await N(characters.map((t) => CharacterName(t))), newli);
     return content;
 }

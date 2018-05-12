@@ -1,9 +1,14 @@
-.item, .stat, .spell{
-	background:#CCC;
-	border: 0px solid;
-	border-radius: 5px;
+.item, .stat, .spell, .string-item{
 	padding:5px;
 	margin:2px;
+}
+
+li {
+	list-style:none;
+}
+
+.character-list{
+	display:block;
 }
 
 main{

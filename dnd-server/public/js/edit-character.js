@@ -1,10 +1,10 @@
 async function EditCharacter(data) {
     data = await data;
     const putter = uploader(data, "Character");
-    const newitem = $("<button>New Item</button>");
-    const newspell = $("<button>New Spell</button>")
-    const newoprof = $("<button>New Proficiency</button>");
-    const newtrait = $("<button>New Trait</button>");
+    const newitem = $("<button class='mdc-button'>New Item</button>");
+    const newspell = $("<button class='mdc-button'>New Spell</button>")
+    const newoprof = $("<button class='mdc-button'>New Proficiency</button>");
+    const newtrait = $("<button class='mdc-button'>New Trait</button>");
     newitem.click(async(x) => {
         data.inventory.push(null);
         putter(["inventory", data.inventory.length - 1], reload)(Item.blank);
@@ -34,9 +34,9 @@ async function EditCharacter(data) {
     <br/>
     
     <div> Inspiration: ${ph() } </div>
-    <div> Stats: ${ 
+    <div> Stats: <ul class="mdc-list"> ${ 
         phn(data.stats.length)
-         } </div>
+         } </ul>
 	<br/>
 	
 	<div> Athletics: ${Math.floor((data.stats[0].value-10)/2)}</div>

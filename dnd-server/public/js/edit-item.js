@@ -7,7 +7,7 @@ async function EditItem(character, i, putter, callback) {
 							 new EditorFor(data.name, "string", putter(["inventory", i, "name"], callback)),
 							 new EditorFor(data.type, "string", putter(["inventory", i, "type"], callback))
 							);
-	const button = $("<button>Delete</button>");
+	const button = $("<button class='mdc-button'>Delete</button>");
 	button.click(async (x)=>{
 		if(confirm("Really delete " + fetch(character, ["inventory", i, "name"]) + "?")){
 			character.inventory.splice(i, 1);
