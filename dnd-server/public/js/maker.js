@@ -42,7 +42,7 @@ function make(format, classes) {
 }
 
 function titleize(x){
-	return x.split(/ |-/g).map((x)=> x[0].toUpperCase() + x.substring(1)).join(" ");
+	return x.replace(/\//g,"").split(/ |-/g).map((x)=> x[0].toUpperCase() + x.substring(1)).join(" ");
 }
 
 function reload(){

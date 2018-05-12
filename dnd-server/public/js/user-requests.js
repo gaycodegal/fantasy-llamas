@@ -1,30 +1,4 @@
 const redirecturl = "/home";
-window.addEventListener("load", () => {
-    const login = document.getElementById("login");
-    if (login) {
-        login.addEventListener("submit", async function(event) {
-            event.preventDefault();
-            const user = {
-                username: document.getElementById("username").value,
-                password: document.getElementById("password").value
-            };
-
-            const method = login.getAttribute("method");
-            const path = login.getAttribute("action");
-            const req = await request(method, path, user);
-            const resp = JSON.parse(req.responseText);
-            if (resp.success) {
-                console.log(resp.cookie);
-                localStorage.setItem("cookie", resp.cookie);
-				localStorage.setItem("uuid", (await request("get", "/whoami")).responseText);
-            } else {
-                alert("Something went wrong. Error: " + resp.error);
-            }
-            window.location.href = redirecturl;
-            return false;
-        }, false);
-    }
-});
 
 function logout() {
     localStorage.clear();
