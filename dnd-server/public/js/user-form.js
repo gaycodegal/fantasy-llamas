@@ -3,9 +3,9 @@ async function UserForm(action) {
     let login = await make(`<form action="${action}" method="POST">
 	  <label for="username">username: </label><input id="username" name="username"/>
 	  <br/>
-	  <label for="password">password: </label><input id="password" name="password"/>
+	  <label for="password">password: </label><input type="password" id="password" name="password"/>
 	  <br/>
-	  <button type="submit">submit</button>
+	  <button type="submit" class="mdc-button">submit</button>
 	</form>`);
     login.submit(async function(event) {
         event.preventDefault();
